@@ -17,8 +17,8 @@ public class Autenticador {
 	
 	@SuppressWarnings("rawtypes")
 	public static boolean autenticarUsuarioSenha(WebServiceContext context) throws Exception {
-		MessageContext messageCOntext = context.getMessageContext();
-		Map httpHeaders = (Map) messageCOntext.get(MessageContext.HTTP_REQUEST_HEADERS);
+		MessageContext messageContext = context.getMessageContext();
+		Map httpHeaders = (Map) messageContext.get(MessageContext.HTTP_REQUEST_HEADERS);
 		
 		if (!httpHeaders.containsKey("usuario")) {
 			throw new SISRHException("Informe o usuario");			
@@ -42,29 +42,28 @@ public class Autenticador {
 	}
 	private static boolean autenticarUsuarioSenha(String usuario, String senha) throws Exception {
 		try {
-			String senhaMd5 = md5(senha);
-			Connection conn = Banco.getConexao();
-			String sql = "SELECT nome, senha FROM Usuario WHERE nome = ? and senha = ?";
-			
-			PreparedStatement prepStmt = conn.prepareStatement(sql);
-			prepStmt.setString(1, usuario);
-			prepStmt.setString(2, senhaMd5);
-			ResultSet rs = prepStmt.executeQuery();
-			while (rs.next()) {
-				return true;
+				String senhaMd5 = md5(senha);
+				Connection conn = Banco.getConexao();
+				String sql = "SELECT nome, senha FROM Usuario WHERE nome = ? and senha = ?";
+				
+				PreparedStatement prepStmt = conn.prepareStatement(sql);
+				prepStmt.setString(1, usuario);
+				prepStmt.setString(2, senhaMd5);
+				ResultSet rs = prepStmt.executeQuery();
+				while (rs.next()) {
+					return true;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-		
+			return false;
+			
 	}	
 	public static String md5(String valor) throws Exception {
 		String s = valor;
-		MessageDigest m = MessageDigest.getInstance("MDS");
+		MessageDigest m = MessageDigest.getInstance("MD5");
 		m.update(s.getBytes(), 0, s.length());
 		return "" + new BigInteger(1, m.digest()).toString(16);
 	}
-	}
-	
 }
+	
