@@ -101,15 +101,13 @@ public class Banco {
 		return lista;
 	}
 
-	public static List<Solicitacao> listarSolicitacoes(String usuario) throws Exception {
+	public static List<Solicitacao> listarSolicitacoes() throws Exception {
 		List<Solicitacao> lista = new ArrayList<Solicitacao>();
 		Connection conn = Banco.getConexao();
 		   String sql = "SELECT * FROM Solicitacao AS s " +
-                   "INNER JOIN Empregado AS e ON s.matricula = e.matricula " +
-                   "INNER JOIN Usuario AS u ON e.matricula = u.matricula " +
-                   "WHERE u.nome = ?";
+	                 "INNER JOIN Empregado AS e ON s.matricula = e.matricula " +
+	                 "INNER JOIN Usuario AS u ON e.matricula = u.matricula";
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
-	    prepStmt.setString(1, usuario);
 		ResultSet rs = prepStmt.executeQuery();
 		while (rs.next()) {
 			Integer id = rs.getInt("id");

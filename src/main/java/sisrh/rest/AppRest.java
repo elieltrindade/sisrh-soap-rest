@@ -26,6 +26,7 @@ public class AppRest extends Application {
 		Set<Class<?>> resources = new HashSet<>();
 		resources.add(SistemaRest.class);
 		resources.add(EmpregadoRest.class);
+		resources.add(SolicitacaoRest.class);
 		resources.add(ApiListingResource.class);
 		resources.add(SwaggerSerializers.class);
 		return resources;
